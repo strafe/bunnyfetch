@@ -3,7 +3,7 @@
 # bunnyfetch
 # 🐰 macOS version of elenapan's bunnyfetch.
 readonly program="$(basename "$0")"
-readonly version=0.0.1
+readonly version=0.0.2
 
 function get_window_manager() {
     # From neofetch (https://github.com/dylanaraps/neofetch).
@@ -48,7 +48,7 @@ setup_colors
 setup_variables
 
 tput clear
-printf '             %s%s%b  %s%s\n   (\ /)     %s%b  %s%s\n   ( %s. .%s)    %s%b  %s%s\n   c(%s"%s)(%s"%s)   %s%b  %s%s\n             %s%b  %s%s\n' \
+printf '\n             %s%s%b  %s%s\n   (\ /)     %s%b  %s%s\n   ( %s. .%s)    %s%b  %s%s\n   c(%s"%s)(%s"%s)   %s%b  %s%s\n             %s%b  %s%s\n\n' \
     "$d" "$c1" '\xEF\x82\x8A' "$t" "$window_manager" \
     "$c3" '\xEF\x82\xAD' "$t" "$kernel_version" \
     "$d" "$t" "$c2" '\xEF\x84\xA0' "$t" "$current_shell" \
