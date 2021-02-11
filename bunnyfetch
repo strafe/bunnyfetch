@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# bunnyfetch
+# 🐰 macOS version of elenapan's bunnyfetch.
+readonly program="$(basename "$0")"
+readonly version=0.0.1
+
+function get_window_manager() {
+    # From neofetch (https://github.com/dylanaraps/neofetch).
+    local -r ps_line="$(ps -e | grep -o \
+    -e "[S]pectacle" \
+    -e "[A]methyst" \
+    -e "[k]wm" \
+    -e "[c]hun[k]wm" \
+    -e "[y]abai" \
+    -e "[R]ectangle")"
+
+    case $ps_line in
+        *chunkwm*)   echo chunkwm ;;
+        *kwm*)       echo Kwm ;;
+        *yabai*)     echo yabai ;;
+        *Amethyst*)  echo Amethyst ;;
+        *Spectacle*) echo Spectacle ;;
+        *Rectangle*) echo Rectangle ;;
+        *)           echo Quartz Compositor ;;
+    esac
+}
+
+function setup_colors() {
+    for i in {0..7}; do
+        printf -v "c${i}" '%b' "\e[3${i}m"
+    done
+
+    readonly d=$'\e[1m'
+    readonly t=$'\e[0m'
+    readonly v=$'\e[7m'
+}
+
+function setup_variables() {
+    readonly window_manager="$(get_window_manager)"
+    readonly kernel_version="$(uname -r | cut -d '-' -f1)"
+    readonly current_shell="$(basename "$SHELL")"
+    readonly resolution="$(system_profiler SPDisplaysDataType | awk '/Resolution:/ {printf $2"x"$4""}')"
+    readonly wifi_ssid="$(/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I  | awk -F' SSID: '  '/ SSID: / {print $2}')"
+}
+
+setup_colors
+setup_variables
+
+tput clear
+printf '             %s%s%b  %s%s\n   (\ /)     %s%b  %s%s\n   ( %s. .%s)    %s%b  %s%s\n   c(%s"%s)(%s"%s)   %s%b  %s%s\n             %s%b  %s%s\n' \
+    "$d" "$c1" '\xEF\x82\x8A' "$t" "$window_manager" \
+    "$c3" '\xEF\x82\xAD' "$t" "$kernel_version" \
+    "$d" "$t" "$c2" '\xEF\x84\xA0' "$t" "$current_shell" \
+    "$c1" "$t" "$c1" "$t" "$c5" '\xEF\x80\xBE' "$t" "$resolution" \
+    "$c4" '\xEF\x87\xAB' "$t" "$wifi_ssid"
